@@ -1,5 +1,8 @@
 Django>4.2,<4.3
+pillow==9.4.0
+python-decouple==3.4
 djangorestframework==3.14.0
 django-filter==23.2
 Markdown==3.4.3
-python-decouple==3.4
+coreapi==2.3.3
+drf-yasg[validation]
