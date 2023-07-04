@@ -9,6 +9,7 @@ class DefaultMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = DefaultMessage
         fields = [
+            "id",
             "title",
             "message",
         ]
@@ -20,7 +21,9 @@ class OccasionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Occasion
         fields = [
+            "id",
             "title",
+            "default_messages",
         ]
 
 
@@ -40,7 +43,6 @@ class RegistrySerializer(serializers.ModelSerializer):
             "addressed_to",
             "event_date",
             "message",
-            "default_messages",
             "custom_link",
             "link",
             "show_who_has_sent_gifts",
@@ -50,9 +52,14 @@ class RegistrySerializer(serializers.ModelSerializer):
             "updated_at",
         ]
         read_only_fields = [
-            "id",
-            "default_messages",
             "link",
             "created_at",
             "updated_at",
         ]
+    
+    def to_representation(self, instance):
+        """Add default_messages to serializer"""
+        data = super(RegistrySerializer, self).to_representation(instance)
+        default_messages = instance.occasion.default_messages.all()
+        data["default_messages"] = [messages.message for messages in default_messages]
+        return data

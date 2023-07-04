@@ -5,10 +5,11 @@ from django.core.validators import RegexValidator
 from django.db import models
 
 
-class Occasion(models.Model):
-    """Registry categories"""
+class DefaultMessage(models.Model):
+    """Registry default message"""
 
-    title = models.CharField(max_length=100, unique=True)
+    title = models.CharField(max_length=100)
+    message = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -16,11 +17,11 @@ class Occasion(models.Model):
         return self.title
 
 
-class DefaultMessage(models.Model):
-    """Registry default message"""
+class Occasion(models.Model):
+    """Registry categories"""
 
-    title = models.CharField(max_length=100)
-    message = models.TextField()
+    title = models.CharField(max_length=100, unique=True)
+    default_messages = models.ManyToManyField(DefaultMessage, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -38,7 +39,6 @@ class Registry(models.Model):
     addressed_to = models.CharField(max_length=100)
     event_date = models.DateField(default=date.today)
     message = models.TextField()
-    default_messages = models.ManyToManyField(DefaultMessage, blank=True)
     custom_link = models.CharField(
         max_length=50,
         unique=True,
